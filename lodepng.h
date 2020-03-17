@@ -104,6 +104,10 @@ typedef enum LodePNGColorType {
   LCT_RGBA = 6 /*RGB with alpha: 8,16 bit*/
 } LodePNGColorType;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef LODEPNG_COMPILE_DECODER
 /*
 Converts PNG data in memory to raw pixel data.
@@ -200,6 +204,10 @@ unsigned lodepng_encode24_file(const char* filename,
                                const unsigned char* image, unsigned w, unsigned h);
 #endif /*LODEPNG_COMPILE_DISK*/
 #endif /*LODEPNG_COMPILE_ENCODER*/
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #ifdef LODEPNG_COMPILE_CPP

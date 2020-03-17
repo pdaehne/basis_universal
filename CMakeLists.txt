@@ -26,7 +26,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
 set(CMAKE_CXX_FLAGS -std=c++11)
-set(GCC_COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden -fPIC -fno-strict-aliasing -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-local-typedefs -Wno-unused-value -Wno-unused-parameter -Wno-unused-variable -Wno-reorder")
+set(GCC_COMPILE_FLAGS "-fvisibility-inlines-hidden -fPIC -fno-strict-aliasing -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-local-typedefs -Wno-unused-value -Wno-unused-parameter -Wno-unused-variable -Wno-reorder")
 
 if (NOT BUILD_X64)
 	set(GCC_COMPILE_FLAGS "${GCC_COMPILE_FLAGS} -m32")
@@ -59,10 +59,10 @@ set(BASISU_SRC_LIST ${COMMON_SRC_LIST}
 	basisu_resampler.cpp
 	basisu_resample_filters.cpp
 	basisu_ssim.cpp
-	basisu_tool.cpp
 	basisu_astc_decomp.cpp
 	lodepng.cpp
 	transcoder/basisu_transcoder.cpp
+	c_api/c_api.cpp
 	)
 
 if (APPLE)
@@ -73,16 +73,22 @@ endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${BIN_DIRECTORY})
 
-add_executable(basisu ${BASISU_SRC_LIST})
-target_link_libraries(basisu m pthread)
+add_library(basisu SHARED ${BASISU_SRC_LIST})
+
+add_executable(c_api c_api/main.c)
+target_link_libraries(c_api basisu m pthread)
+
+add_executable(basisu_tool basisu_tool.cpp)
+set_target_properties(basisu_tool PROPERTIES OUTPUT_NAME "basisu")
+target_link_libraries(basisu_tool basisu m pthread)
 
 install(TARGETS basisu DESTINATION bin)
 
 if (CMAKE_BUILD_TYPE STREQUAL Release)
     if (APPLE)
-	    add_custom_command(TARGET basisu POST_BUILD COMMAND strip -X -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basisu)
+	    add_custom_command(TARGET basisu_tool POST_BUILD COMMAND strip -X -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basisu)
     else()
-        add_custom_command(TARGET basisu POST_BUILD COMMAND strip -g -X -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basisu)
+        add_custom_command(TARGET basisu_tool POST_BUILD COMMAND strip -g -X -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basisu)
     endif()
 endif()
 
