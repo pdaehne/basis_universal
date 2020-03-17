@@ -49,7 +49,7 @@ DLLMAPPING void CALLCONV basisu_image_resize(basisu_image *image, uint32_t w, ui
 
 DLLMAPPING uint32_t CALLCONV basisu_image_get_pixels_size(basisu_image *image) {
 	auto img = reinterpret_cast<basisu::image*>(image);
-	return img->get_pixels().size();
+	return static_cast<uint32_t>(img->get_pixels().size());
 }
 
 DLLMAPPING uint8_t* CALLCONV basisu_image_get_pixels(basisu_image *image) {
@@ -116,7 +116,7 @@ DLLMAPPING int CALLCONV basisu_basis_compressor_process(basisu_basis_compressor 
 
 DLLMAPPING uint32_t CALLCONV basisu_basis_compressor_get_output_basis_file_size(basisu_basis_compressor *compressor) {
 	auto cmp = reinterpret_cast<basisu::basis_compressor*>(compressor);
-	return cmp->get_output_basis_file().size();
+	return static_cast<uint32_t>(cmp->get_output_basis_file().size());
 }
 
 DLLMAPPING const void* CALLCONV basisu_basis_compressor_get_output_basis_file(basisu_basis_compressor *compressor) {
