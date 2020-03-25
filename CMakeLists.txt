@@ -19,32 +19,34 @@ else()
 	message("Building 32-bit")
 endif(BUILD_X64)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+if (NOT MSVC)
+   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+   set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+   set(CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
-set(CMAKE_CXX_FLAGS -std=c++11)
-set(GCC_COMPILE_FLAGS "-fvisibility-inlines-hidden -fPIC -fno-strict-aliasing -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-local-typedefs -Wno-unused-value -Wno-unused-parameter -Wno-unused-variable -Wno-reorder")
+   set(CMAKE_CXX_FLAGS -std=c++11)
+   set(GCC_COMPILE_FLAGS "-fPIC -fno-strict-aliasing -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Wno-unused-local-typedefs -Wno-unused-value -Wno-unused-parameter -Wno-unused-variable")
 
-if (NOT BUILD_X64)
-	set(GCC_COMPILE_FLAGS "${GCC_COMPILE_FLAGS} -m32")
+   if (NOT BUILD_X64)
+	  set(GCC_COMPILE_FLAGS "${GCC_COMPILE_FLAGS} -m32")
+   endif()
+
+   if (STATIC)
+	  set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_LINK_FLAGS} -static-libgcc -static-libstdc++ -static")
+   else()
+	  set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_LINK_FLAGS} -Wl,-rpath .")
+   endif(STATIC)
+
+   set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} ${GCC_COMPILE_FLAGS}")
+   set(CMAKE_C_FLAGS_RELEASE  "${CMAKE_C_FLAGS_RELEASE} ${GCC_COMPILE_FLAGS}")
+   set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${GCC_COMPILE_FLAGS} -D_DEBUG")
+
+   set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COMPILE_FLAGS}")
+   set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} ${GCC_COMPILE_FLAGS}")
+   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${GCC_COMPILE_FLAGS} -D_DEBUG")
 endif()
-
-if (STATIC)
-	set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_LINK_FLAGS} -static-libgcc -static-libstdc++ -static")
-else()
-	set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_LINK_FLAGS} -Wl,-rpath .")
-endif(STATIC)
-
-set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} ${GCC_COMPILE_FLAGS}")
-set(CMAKE_C_FLAGS_RELEASE  "${CMAKE_C_FLAGS_RELEASE} ${GCC_COMPILE_FLAGS}")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${GCC_COMPILE_FLAGS} -D_DEBUG")
-
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} ${GCC_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${GCC_COMPILE_FLAGS} -D_DEBUG")
 
 set(BASISU_SRC_LIST ${COMMON_SRC_LIST} 
 	basisu_backend.cpp
@@ -60,15 +62,19 @@ set(BASISU_SRC_LIST ${COMMON_SRC_LIST}
 	basisu_resample_filters.cpp
 	basisu_ssim.cpp
 	basisu_astc_decomp.cpp
+	basisu_uastc_enc.cpp
+	basisu_bc7enc.cpp
 	lodepng.cpp
+	apg_bmp.c
+	jpgd.cpp
 	transcoder/basisu_transcoder.cpp
 	c_api/c_api.cpp
 	)
 
 if (APPLE)
-	set(BIN_DIRECTORY "bin_osx")
+   set(BIN_DIRECTORY "bin_osx")
 else()
-    set(BIN_DIRECTORY "bin")
+   set(BIN_DIRECTORY "bin")
 endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${BIN_DIRECTORY})
@@ -80,15 +86,19 @@ target_link_libraries(c_api basisu m pthread)
 
 add_executable(basisu_tool basisu_tool.cpp)
 set_target_properties(basisu_tool PROPERTIES OUTPUT_NAME "basisu")
-target_link_libraries(basisu_tool basisu m pthread)
+if (NOT MSVC)
+   target_link_libraries(basisu_tool basisu m pthread)
+endif()
 
 install(TARGETS basisu DESTINATION bin)
 
-if (CMAKE_BUILD_TYPE STREQUAL Release)
-    if (APPLE)
-	    add_custom_command(TARGET basisu_tool POST_BUILD COMMAND strip -X -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basisu)
-    else()
-        add_custom_command(TARGET basisu_tool POST_BUILD COMMAND strip -g -X -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basisu)
-    endif()
+if (UNIX)
+   if (CMAKE_BUILD_TYPE STREQUAL Release)
+       if (APPLE)
+	       add_custom_command(TARGET basisu_tool POST_BUILD COMMAND strip -X -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basisu)
+       else()
+           add_custom_command(TARGET basisu_tool POST_BUILD COMMAND strip -g -X -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basisu)
+       endif()
+   endif()
 endif()
 
