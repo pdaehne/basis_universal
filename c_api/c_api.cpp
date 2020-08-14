@@ -94,6 +94,11 @@ DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_quality_level(basi
 	prms->m_quality_level = quality_level;
 }
 
+DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_uastc(basisu_basis_compressor_params *params, int uastc) {
+	auto prms = reinterpret_cast<basisu::basis_compressor_params*>(params);
+	prms->m_uastc = uastc != 0;
+}
+
 
 DLLMAPPING basisu_basis_compressor* CALLCONV basisu_basis_compressor_new() {
 	return reinterpret_cast<basisu_basis_compressor*>(new basisu::basis_compressor());
@@ -122,6 +127,67 @@ DLLMAPPING uint32_t CALLCONV basisu_basis_compressor_get_output_basis_file_size(
 DLLMAPPING const void* CALLCONV basisu_basis_compressor_get_output_basis_file(basisu_basis_compressor *compressor) {
 	auto cmp = reinterpret_cast<basisu::basis_compressor*>(compressor);
 	return cmp->get_output_basis_file().data();
+}
+
+DLLMAPPING const basisu_basisu_backend_output* CALLCONV basisu_basis_compressor_get_backend_output(basisu_basis_compressor *compressor) {
+	auto cmp = reinterpret_cast<basisu::basis_compressor*>(compressor);
+	return reinterpret_cast<const basisu_basisu_backend_output*>(cmp->get_backend_output());
+}
+
+
+DLLMAPPING int CALLCONV basisu_basisu_backend_output_get_num_endpoints(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_num_endpoints;
+}
+
+DLLMAPPING int CALLCONV basisu_basisu_backend_output_get_num_selectors(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_num_selectors;
+}
+
+DLLMAPPING uint32_t CALLCONV basisu_basisu_backend_output_get_endpoint_palette_size(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_endpoint_palette.size();
+}
+
+DLLMAPPING const void* CALLCONV basisu_basisu_backend_output_get_endpoint_palette(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_endpoint_palette.data();
+}
+
+DLLMAPPING uint32_t CALLCONV basisu_basisu_backend_output_get_selector_palette_size(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_selector_palette.size();
+}
+
+DLLMAPPING const void* CALLCONV basisu_basisu_backend_output_get_selector_palette(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_selector_palette.data();
+}
+
+DLLMAPPING uint32_t CALLCONV basisu_basisu_backend_output_get_slice_image_tables_size(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_slice_image_tables.size();
+}
+
+DLLMAPPING const void* CALLCONV basisu_basisu_backend_output_get_slice_image_tables(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_slice_image_tables.data();
+}
+
+DLLMAPPING uint32_t CALLCONV basisu_basisu_backend_output_get_num_slice_image_data(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_slice_image_data.size();
+}
+
+DLLMAPPING uint32_t CALLCONV basisu_basisu_backend_output_get_slice_image_data_size(const basisu_basisu_backend_output *backend_output, int i) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_slice_image_data[i].size();
+}
+
+DLLMAPPING const void* CALLCONV basisu_basisu_backend_output_get_slice_image_data(const basisu_basisu_backend_output *backend_output, int i) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return outp->m_slice_image_data[i].data();
 }
 
 

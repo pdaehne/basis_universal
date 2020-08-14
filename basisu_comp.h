@@ -408,6 +408,8 @@ namespace basisu
 
 		error_code process();
 
+		const basisu_backend_output *get_backend_output() const { return m_params.m_uastc ? &m_uastc_backend_output : &m_backend.get_output(); }
+
 		const uint8_vec &get_output_basis_file() const { return m_output_basis_file; }
 		
 		const std::vector<image_stats> &get_stats() const { return m_stats; }

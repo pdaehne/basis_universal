@@ -12,7 +12,7 @@ int main() {
 
 	unsigned char *imageData;
 	unsigned imageWidth, imageHeight;
-	if (lodepng_decode32_file(&imageData, &imageWidth, &imageHeight, "abfeuerumschalter.png") != 0) {
+	if (lodepng_decode32_file(&imageData, &imageWidth, &imageHeight, "abfeuerumschalter.png"/*"antrieb.png"*/) != 0) {
 		fprintf(stderr, "Loading image failed\n");
 		return EXIT_FAILURE;
 	}
@@ -40,9 +40,10 @@ int main() {
 	basisu_basis_compressor_params_set_m_pSel_codebook(params, sel_codebook);
 	basisu_basis_compressor_params_set_m_pJob_pool(params, jpool);
 	basisu_basis_compressor_params_add_m_source_images(params, image1);
-	basisu_basis_compressor_params_add_m_source_images(params, image2);
+	//basisu_basis_compressor_params_add_m_source_images(params, image2);
 	basisu_basis_compressor_params_set_m_mip_gen(params, 1);
 	basisu_basis_compressor_params_set_m_quality_level(params, 128);
+	//basisu_basis_compressor_params_set_m_uastc(params, 1);
 
 	basisu_basis_compressor *compressor = basisu_basis_compressor_new();
 
@@ -55,6 +56,20 @@ int main() {
 		fprintf(stderr, "Processing compressor failed\n");
 		return EXIT_FAILURE;
 	}
+
+	const basisu_basisu_backend_output *backend_output = basisu_basis_compressor_get_backend_output(compressor);
+	printf("num_endpoints = 0x%x\n", basisu_basisu_backend_output_get_num_endpoints(backend_output));
+	printf("endpoint_palette_size = 0x%x\n", (int)basisu_basisu_backend_output_get_endpoint_palette_size(backend_output));
+	printf("num_selectors = 0x%x\n", basisu_basisu_backend_output_get_num_selectors(backend_output));
+	printf("selector_palette_size = 0x%x\n", (int)basisu_basisu_backend_output_get_selector_palette_size(backend_output));
+	printf("slice_image_tables_size = 0x%x\n", (int)basisu_basisu_backend_output_get_slice_image_tables_size(backend_output));
+	uint32_t num_slice_image_data = basisu_basisu_backend_output_get_num_slice_image_data(backend_output);
+	printf("num_slice_image_data = 0x%x\n", (int)num_slice_image_data);
+	for (uint32_t i = 0; i < num_slice_image_data; ++i) {
+		printf("slice %i:\n", i);
+		printf("  slice_image_data_size = 0x%x\n", (int)basisu_basisu_backend_output_get_slice_image_data_size(backend_output, i));
+	}
+	printf("---\n");
 
 	size_t size = basisu_basis_compressor_get_output_basis_file_size(compressor);
 	const void *data = basisu_basis_compressor_get_output_basis_file(compressor);
