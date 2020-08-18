@@ -190,5 +190,54 @@ DLLMAPPING const void* CALLCONV basisu_basisu_backend_output_get_slice_image_dat
 	return outp->m_slice_image_data[i].data();
 }
 
-
+DLLMAPPING uint32_t CALLCONV basisu_basisu_backend_output_get_num_total_images(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	uint32_t num_total_images = 0;
+	for (uint32_t i = 0; i < outp->m_slice_desc.size(); i++)
+		num_total_images = basisu::maximum<uint32_t>(num_total_images, outp->m_slice_desc[i].m_source_file_index + 1);
+	return num_total_images;
 }
+
+int find_first_slice_index(const basisu::basisu_backend_output *outp, uint32_t image_index, uint32_t level_index) {
+	for (uint32_t i = 0; i < outp->m_slice_desc.size(); i++) {
+		const basisu::basisu_backend_slice_desc& slice_desc = outp->m_slice_desc[i];
+		if ((slice_desc.m_source_file_index == image_index) && (slice_desc.m_mip_index == level_index))
+			return i;
+	}
+
+	return -1;
+}
+
+DLLMAPPING uint32_t CALLCONV basisu_basisu_backend_output_get_num_levels(const basisu_basisu_backend_output *backend_output, uint32_t image_index) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	int slice_index = find_first_slice_index(outp, image_index, 0);
+	if (slice_index < 0) {
+		return 0;
+	}
+	uint32_t total_levels = 1;
+	for (uint32_t i = slice_index + 1; i < outp->m_slice_desc.size(); i++) {
+		if (outp->m_slice_desc[i].m_source_file_index == image_index)
+			total_levels = basisu::maximum<uint32_t>(total_levels, outp->m_slice_desc[i].m_mip_index + 1);
+		else
+			break;
+	}
+	return total_levels;
+}
+
+DLLMAPPING uint32_t CALLCONV basisu_basisu_backend_output_get_slice_index(const basisu_basisu_backend_output *backend_output, uint32_t image_index, uint32_t level_index) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	return find_first_slice_index(outp, image_index, level_index);
+}
+
+DLLMAPPING uint32_t CALLCONV basisu_basisu_backend_output_has_alpha_slices(const basisu_basisu_backend_output *backend_output) {
+	auto outp = reinterpret_cast<const basisu::basisu_backend_output*>(backend_output);
+	for (uint32_t slice_index = 0; slice_index < outp->m_slice_desc.size(); ++slice_index) {
+		if (outp->m_slice_desc[slice_index].m_alpha) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+
+} // extern "C"
