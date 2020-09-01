@@ -41,10 +41,6 @@ DLLMAPPING void CALLCONV basisu_job_pool_delete(basisu_job_pool *job_pool);
 
 typedef struct basisu_image_ basisu_image;
 
-DLLMAPPING basisu_image* CALLCONV basisu_image_new();
-
-DLLMAPPING void CALLCONV basisu_image_delete(basisu_image *image);
-
 DLLMAPPING void CALLCONV basisu_image_resize(basisu_image *image, uint32_t w, uint32_t h, uint32_t p);
 
 DLLMAPPING uint32_t CALLCONV basisu_image_get_pixels_size(basisu_image *image);
@@ -65,8 +61,6 @@ DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_pJob_pool(basisu_b
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_resize_m_source_images(basisu_basis_compressor_params *params, size_t count);
 
 DLLMAPPING basisu_image *CALLCONV basisu_basis_compressor_params_get_m_source_images(basisu_basis_compressor_params *params, size_t index);
-
-DLLMAPPING void CALLCONV basisu_basis_compressor_params_add_m_source_images(basisu_basis_compressor_params *params, basisu_image *image);
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_mip_gen(basisu_basis_compressor_params *params, int mip_gen);
 

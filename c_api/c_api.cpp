@@ -34,14 +34,6 @@ DLLMAPPING void CALLCONV basisu_job_pool_delete(basisu_job_pool *job_pool) {
 }
 
 
-DLLMAPPING basisu_image* CALLCONV basisu_image_new() {
-	return reinterpret_cast<basisu_image*>(new basisu::image());
-}
-
-DLLMAPPING void CALLCONV basisu_image_delete(basisu_image *image) {
-	delete reinterpret_cast<basisu::image*>(image);
-}
-
 DLLMAPPING void CALLCONV basisu_image_resize(basisu_image *image, uint32_t w, uint32_t h, uint32_t p) {
 	auto img = reinterpret_cast<basisu::image*>(image);
 	img->resize(w, h, p);
@@ -86,12 +78,6 @@ DLLMAPPING void CALLCONV basisu_basis_compressor_params_resize_m_source_images(b
 DLLMAPPING basisu_image *CALLCONV basisu_basis_compressor_params_get_m_source_images(basisu_basis_compressor_params *params, size_t index) {
 	auto prms = reinterpret_cast<basisu::basis_compressor_params*>(params);
 	return reinterpret_cast<basisu_image*>(&(prms->m_source_images[index]));
-}
-
-DLLMAPPING void CALLCONV basisu_basis_compressor_params_add_m_source_images(basisu_basis_compressor_params *params, basisu_image *image) {
-	auto prms = reinterpret_cast<basisu::basis_compressor_params*>(params);
-	auto img = reinterpret_cast<basisu::image*>(image);
-	prms->m_source_images.push_back(*img);
 }
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_mip_gen(basisu_basis_compressor_params *params, int mip_gen) {
