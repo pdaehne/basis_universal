@@ -146,9 +146,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="apg_bmp.c" />
     <ClCompile Include="basisu_astc_decomp.cpp" />
     <ClCompile Include="basisu_backend.cpp" />
     <ClCompile Include="basisu_basis_file.cpp" />
+    <ClCompile Include="basisu_bc7enc.cpp" />
     <ClCompile Include="basisu_comp.cpp" />
     <ClCompile Include="basisu_enc.cpp" />
     <ClCompile Include="basisu_etc.cpp" />
@@ -159,14 +161,18 @@
     <ClCompile Include="basisu_resampler.cpp" />
     <ClCompile Include="basisu_resample_filters.cpp" />
     <ClCompile Include="basisu_ssim.cpp" />
+    <ClCompile Include="basisu_uastc_enc.cpp" />
     <ClCompile Include="c_api\c_api.cpp" />
+    <ClCompile Include="jpgd.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="transcoder\basisu_transcoder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="apg_bmp.h" />
     <ClInclude Include="basisu_astc_decomp.h" />
     <ClInclude Include="basisu_backend.h" />
     <ClInclude Include="basisu_basis_file.h" />
+    <ClInclude Include="basisu_bc7enc.h" />
     <ClInclude Include="basisu_comp.h" />
     <ClInclude Include="basisu_enc.h" />
     <ClInclude Include="basisu_etc.h" />
@@ -177,7 +183,9 @@
     <ClInclude Include="basisu_resampler.h" />
     <ClInclude Include="basisu_resampler_filters.h" />
     <ClInclude Include="basisu_ssim.h" />
+    <ClInclude Include="basisu_uastc_enc.h" />
     <ClInclude Include="c_api\c_api.h" />
+    <ClInclude Include="jpgd.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="transcoder\basisu.h" />
     <ClInclude Include="transcoder\basisu_file_headers.h" />

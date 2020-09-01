@@ -19,6 +19,10 @@
     </ClCompile>
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="c_api\c_api.cpp" />
+    <ClCompile Include="basisu_uastc_enc.cpp" />
+    <ClCompile Include="basisu_bc7enc.cpp" />
+    <ClCompile Include="apg_bmp.c" />
+    <ClCompile Include="jpgd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basisu_astc_decomp.h" />
@@ -50,6 +54,10 @@
     </ClInclude>
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="c_api\c_api.h" />
+    <ClInclude Include="basisu_uastc_enc.h" />
+    <ClInclude Include="basisu_bc7enc.h" />
+    <ClInclude Include="apg_bmp.h" />
+    <ClInclude Include="jpgd.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="transcoder">
