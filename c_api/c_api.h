@@ -62,6 +62,10 @@ DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_pSel_codebook(basi
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_pJob_pool(basisu_basis_compressor_params *params, basisu_job_pool *job_pool);
 
+DLLMAPPING void CALLCONV basisu_basis_compressor_params_resize_m_source_images(basisu_basis_compressor_params *params, size_t count);
+
+DLLMAPPING basisu_image *CALLCONV basisu_basis_compressor_params_get_m_source_images(basisu_basis_compressor_params *params, size_t index);
+
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_add_m_source_images(basisu_basis_compressor_params *params, basisu_image *image);
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_mip_gen(basisu_basis_compressor_params *params, int mip_gen);

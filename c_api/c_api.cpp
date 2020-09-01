@@ -78,6 +78,16 @@ DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_pJob_pool(basisu_b
 	prms->m_pJob_pool = jp;
 }
 
+DLLMAPPING void CALLCONV basisu_basis_compressor_params_resize_m_source_images(basisu_basis_compressor_params *params, size_t count) {
+	auto prms = reinterpret_cast<basisu::basis_compressor_params*>(params);
+	prms->m_source_images.resize(count);
+}
+
+DLLMAPPING basisu_image *CALLCONV basisu_basis_compressor_params_get_m_source_images(basisu_basis_compressor_params *params, size_t index) {
+	auto prms = reinterpret_cast<basisu::basis_compressor_params*>(params);
+	return reinterpret_cast<basisu_image*>(&(prms->m_source_images[index]));
+}
+
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_add_m_source_images(basisu_basis_compressor_params *params, basisu_image *image) {
 	auto prms = reinterpret_cast<basisu::basis_compressor_params*>(params);
 	auto img = reinterpret_cast<basisu::image*>(image);

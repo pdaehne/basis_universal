@@ -10,6 +10,14 @@ int main() {
 
 	basisu_job_pool *jpool = basisu_job_pool_new(1);
 
+	basisu_basis_compressor_params *params = basisu_basis_compressor_params_new();
+	basisu_basis_compressor_params_set_m_pSel_codebook(params, sel_codebook);
+	basisu_basis_compressor_params_set_m_pJob_pool(params, jpool);
+	basisu_basis_compressor_params_set_m_mip_gen(params, 1);
+	basisu_basis_compressor_params_set_m_quality_level(params, 128);
+	//basisu_basis_compressor_params_set_m_uastc(params, 1);
+	basisu_basis_compressor_params_resize_m_source_images(params, 2);
+
 	unsigned char *imageData;
 	unsigned imageWidth, imageHeight;
 	if (lodepng_decode32_file(&imageData, &imageWidth, &imageHeight, "abfeuerumschalter.png"/*"antrieb.png"*/) != 0) {
@@ -17,7 +25,7 @@ int main() {
 		return EXIT_FAILURE;
 	}
 	printf("%ux%u\n", imageWidth, imageHeight);
-	basisu_image *image1 = basisu_image_new();
+	basisu_image *image1 = basisu_basis_compressor_params_get_m_source_images(params, 0);
 	basisu_image_resize(image1, imageWidth, imageHeight, imageWidth);
 	uint8_t *basisuImageData = basisu_image_get_pixels(image1);
 	size_t imageSize = imageWidth * imageHeight * 4;
@@ -29,21 +37,12 @@ int main() {
 		return EXIT_FAILURE;
 	}
 	printf("%ux%u\n", imageWidth, imageHeight);
-	basisu_image *image2 = basisu_image_new();
+	basisu_image *image2 = basisu_basis_compressor_params_get_m_source_images(params, 1);
 	basisu_image_resize(image2, imageWidth, imageHeight, imageWidth);
 	basisuImageData = basisu_image_get_pixels(image2);
 	imageSize = imageWidth * imageHeight * 4;
 	memcpy(basisuImageData, imageData, imageSize);
 	free(imageData);
-
-	basisu_basis_compressor_params *params = basisu_basis_compressor_params_new();
-	basisu_basis_compressor_params_set_m_pSel_codebook(params, sel_codebook);
-	basisu_basis_compressor_params_set_m_pJob_pool(params, jpool);
-	basisu_basis_compressor_params_add_m_source_images(params, image1);
-	//basisu_basis_compressor_params_add_m_source_images(params, image2);
-	basisu_basis_compressor_params_set_m_mip_gen(params, 1);
-	basisu_basis_compressor_params_set_m_quality_level(params, 128);
-	//basisu_basis_compressor_params_set_m_uastc(params, 1);
 
 	basisu_basis_compressor *compressor = basisu_basis_compressor_new();
 
@@ -123,9 +122,6 @@ int main() {
 	basisu_basis_compressor_delete(compressor);
 
 	basisu_basis_compressor_params_delete(params);
-
-	basisu_image_delete(image2);
-	basisu_image_delete(image1);
 
 	basisu_job_pool_delete(jpool);
 
