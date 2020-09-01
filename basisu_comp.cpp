@@ -155,11 +155,11 @@ namespace basisu
 				return cECFailedBackend;
 		}
 
-		//if (!create_basis_file_and_transcode())
-		//	return cECFailedCreateBasisFile;
+		if (!create_basis_file_and_transcode())
+			return cECFailedCreateBasisFile;
 
-		//if (!write_output_files_and_compute_stats())
-		//	return cECFailedWritingOutput;
+		if (!write_output_files_and_compute_stats())
+			return cECFailedWritingOutput;
 
 		return cECSuccess;
 	}
