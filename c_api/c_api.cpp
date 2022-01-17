@@ -1,6 +1,6 @@
 #include "c_api.h"
-#include "../basisu_enc.h"
-#include "../basisu_comp.h"
+#include "../encoder/basisu_enc.h"
+#include "../encoder/basisu_comp.h"
 #include "../transcoder/basisu_transcoder.h"
 
 extern "C" {

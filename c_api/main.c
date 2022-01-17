@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "c_api.h"
-#include "../lodepng.h"
+#include "../encoder/lodepng.h"
 
 int main() {
 	basist_etc1_global_selector_codebook* sel_codebook = basist_etc1_global_selector_codebook_new();
