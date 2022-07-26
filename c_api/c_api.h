@@ -20,18 +20,6 @@ extern "C" {
 #endif
 
 
-typedef struct basist_etc1_global_selector_codebook_ basist_etc1_global_selector_codebook;
-
-DLLMAPPING basist_etc1_global_selector_codebook* CALLCONV basist_etc1_global_selector_codebook_new();
-
-DLLMAPPING void CALLCONV basist_etc1_global_selector_codebook_delete(basist_etc1_global_selector_codebook *codebook);
-
-//DLLMAPPING void CALLCONV basist_etc1_global_selector_codebook_init(basist_etc1_global_selector_codebook *codebook, uint32_t N, const uint32_t* pEntries);
-
-//DLLMAPPING extern const uint32_t* basist_g_global_selector_cb;
-//DLLMAPPING extern const uint32_t basist_g_global_selector_cb_size;
-
-
 typedef struct basisu_job_pool_ basisu_job_pool;
 
 DLLMAPPING basisu_job_pool* CALLCONV basisu_job_pool_new(uint32_t num_threads);
@@ -54,8 +42,6 @@ DLLMAPPING basisu_basis_compressor_params* CALLCONV basisu_basis_compressor_para
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_delete(basisu_basis_compressor_params *params);
 
-DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_pSel_codebook(basisu_basis_compressor_params *params, basist_etc1_global_selector_codebook *codebook);
-
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_pJob_pool(basisu_basis_compressor_params *params, basisu_job_pool *job_pool);
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_resize_m_source_images(basisu_basis_compressor_params *params, size_t count);
@@ -67,6 +53,12 @@ DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_mip_gen(basisu_bas
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_quality_level(basisu_basis_compressor_params *params, int quality_level);
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_uastc(basisu_basis_compressor_params *params, int uastc);
+
+
+DLLMAPPING void CALLCONV basisu_basisu_encoder_init(int use_opencl, int opencl_force_serialization);
+
+DLLMAPPING void CALLCONV basisu_basisu_encoder_deinit();
+
 
 
 typedef struct basisu_basis_compressor_ basisu_basis_compressor;

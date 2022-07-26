@@ -1,17 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "c_api.h"
-#include "../encoder/lodepng.h"
+#include "lodepng.h"
 
 int main() {
-	basist_etc1_global_selector_codebook* sel_codebook = basist_etc1_global_selector_codebook_new();
-
-	//basist_etc1_global_selector_codebook_init(sel_codebook, basist_g_global_selector_cb_size, basist_g_global_selector_cb);
-
 	basisu_job_pool *jpool = basisu_job_pool_new(1);
 
 	basisu_basis_compressor_params *params = basisu_basis_compressor_params_new();
-	basisu_basis_compressor_params_set_m_pSel_codebook(params, sel_codebook);
 	basisu_basis_compressor_params_set_m_pJob_pool(params, jpool);
 	basisu_basis_compressor_params_set_m_mip_gen(params, 1);
 	basisu_basis_compressor_params_set_m_quality_level(params, 128);
@@ -43,6 +38,8 @@ int main() {
 	imageSize = imageWidth * imageHeight * 4;
 	memcpy(basisuImageData, imageData, imageSize);
 	free(imageData);
+
+	basisu_basisu_encoder_init(0, 0);
 
 	basisu_basis_compressor *compressor = basisu_basis_compressor_new();
 
@@ -121,11 +118,11 @@ int main() {
 
 	basisu_basis_compressor_delete(compressor);
 
+	basisu_basisu_encoder_deinit();
+
 	basisu_basis_compressor_params_delete(params);
 
 	basisu_job_pool_delete(jpool);
-
-	basist_etc1_global_selector_codebook_delete(sel_codebook);
 
 	return EXIT_SUCCESS;
 }
