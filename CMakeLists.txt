@@ -166,7 +166,11 @@ else()
 endif()
 
 add_executable(c_api c_api/main.c c_api/lodepng.cpp)
-target_link_libraries(c_api basisu m pthread)
+target_link_libraries(c_api basisu)
+if (NOT MSVC)
+	target_link_libraries(c_api m pthread)
+endif()
+target_compile_definitions(basisu PRIVATE BASISU_DLL_EXPORTS)
 
 add_executable(basisu_tool basisu_tool.cpp)
 set_target_properties(basisu_tool PROPERTIES OUTPUT_NAME "basisu")
