@@ -11,11 +11,11 @@ int main() {
 	basisu_basis_compressor_params_set_m_mip_gen(params, 1);
 	basisu_basis_compressor_params_set_m_quality_level(params, 128);
 	//basisu_basis_compressor_params_set_m_uastc(params, 1);
-	basisu_basis_compressor_params_resize_m_source_images(params, 2);
+	basisu_basis_compressor_params_resize_m_source_images(params, /*2*/1);
 
 	unsigned char *imageData;
 	unsigned imageWidth, imageHeight;
-	if (lodepng_decode32_file(&imageData, &imageWidth, &imageHeight, "abfeuerumschalter.png"/*"antrieb.png"*/) != 0) {
+	if (lodepng_decode32_file(&imageData, &imageWidth, &imageHeight, "emesTest.png"/*"abfeuerumschalter.png"*//*"antrieb.png"*/) != 0) {
 		fprintf(stderr, "Loading image failed\n");
 		return EXIT_FAILURE;
 	}
@@ -27,17 +27,17 @@ int main() {
 	memcpy(basisuImageData, imageData, imageSize);
 	free(imageData);
 
-	if (lodepng_decode32_file(&imageData, &imageWidth, &imageHeight, "RGBA.png") != 0) {
-		fprintf(stderr, "Loading image failed\n");
-		return EXIT_FAILURE;
-	}
-	printf("%ux%u\n", imageWidth, imageHeight);
-	basisu_image *image2 = basisu_basis_compressor_params_get_m_source_images(params, 1);
-	basisu_image_resize(image2, imageWidth, imageHeight, imageWidth);
-	basisuImageData = basisu_image_get_pixels(image2);
-	imageSize = imageWidth * imageHeight * 4;
-	memcpy(basisuImageData, imageData, imageSize);
-	free(imageData);
+	// if (lodepng_decode32_file(&imageData, &imageWidth, &imageHeight, "RGBA.png") != 0) {
+	// 	fprintf(stderr, "Loading image failed\n");
+	// 	return EXIT_FAILURE;
+	// }
+	// printf("%ux%u\n", imageWidth, imageHeight);
+	// basisu_image *image2 = basisu_basis_compressor_params_get_m_source_images(params, 1);
+	// basisu_image_resize(image2, imageWidth, imageHeight, imageWidth);
+	// basisuImageData = basisu_image_get_pixels(image2);
+	// imageSize = imageWidth * imageHeight * 4;
+	// memcpy(basisuImageData, imageData, imageSize);
+	// free(imageData);
 
 	basisu_basisu_encoder_init(0, 0);
 
