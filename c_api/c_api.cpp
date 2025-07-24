@@ -60,9 +60,9 @@ DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_mip_gen(basisu_bas
 	prms->m_mip_gen = mip_gen != 0;
 }
 
-DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_quality_level(basisu_basis_compressor_params *params, int quality_level) {
+DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_etc1s_quality_level(basisu_basis_compressor_params *params, int quality_level) {
 	auto prms = reinterpret_cast<basisu::basis_compressor_params*>(params);
-	prms->m_quality_level = quality_level;
+	prms->m_etc1s_quality_level = quality_level;
 }
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_uastc(basisu_basis_compressor_params *params, int uastc) {

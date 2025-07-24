@@ -50,7 +50,7 @@ DLLMAPPING basisu_image *CALLCONV basisu_basis_compressor_params_get_m_source_im
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_mip_gen(basisu_basis_compressor_params *params, int mip_gen);
 
-DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_quality_level(basisu_basis_compressor_params *params, int quality_level);
+DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_etc1s_quality_level(basisu_basis_compressor_params *params, int quality_level);
 
 DLLMAPPING void CALLCONV basisu_basis_compressor_params_set_m_uastc(basisu_basis_compressor_params *params, int uastc);
 

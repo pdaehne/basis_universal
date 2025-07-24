@@ -9,7 +9,7 @@ int main() {
 	basisu_basis_compressor_params *params = basisu_basis_compressor_params_new();
 	basisu_basis_compressor_params_set_m_pJob_pool(params, jpool);
 	basisu_basis_compressor_params_set_m_mip_gen(params, 1);
-	basisu_basis_compressor_params_set_m_quality_level(params, 128);
+	basisu_basis_compressor_params_set_m_etc1s_quality_level(params, 128);
 	//basisu_basis_compressor_params_set_m_uastc(params, 1);
 	basisu_basis_compressor_params_resize_m_source_images(params, /*2*/1);
 
