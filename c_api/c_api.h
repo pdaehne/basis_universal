@@ -4,7 +4,7 @@
 #include <stddef.h>
 
 #if defined(_WIN32)
-#  if defined(BASISU_DLL_EXPORTS)
+#  if defined(basisu_encoder_EXPORTS)
 #    define DLLMAPPING __declspec(dllexport)
 #  else
 #    define DLLMAPPING __declspec(dllimport)
